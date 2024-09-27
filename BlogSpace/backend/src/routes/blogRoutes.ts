@@ -53,13 +53,13 @@ router.post("/", auth, async(req, res) => {
 
 
 //Route retrive all posts published by logged in user.
-router.get("/user/:id", auth, async(req, res) => {
+router.get("/user/posts", auth, async(req, res) => {
 
-    const { id } = req.params;
+    const authorID = req.userId;
     try{
         const allPosts = await prisma.post.findMany({
             where : { 
-                authorId : id as string,
+                authorId : authorID,
             }
         });
 

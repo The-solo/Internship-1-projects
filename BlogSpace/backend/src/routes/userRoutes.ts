@@ -1,7 +1,7 @@
 import  express, { response }  from "express";
 import { PrismaClient } from '@prisma/client';
 import * as argon2 from "argon2";
-import { userSchema } from "../validation/schema.js";
+import { signinInput, signupInput, updateUser } from "../validation/schemas.js";
 import  auth from "../middlewares/auth.js";
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -22,9 +22,9 @@ const prisma = new PrismaClient({
 //SignUp route
 router.post('/signup', async(req, res) => {
 
-    const body = await req.body;
+    const body = req.body;
     try {
-        const valid = userSchema.safeParse(body);
+        const valid = signupInput.safeParse(body);
 
         if(!valid.success) {
             return res.status(400).json({
@@ -52,10 +52,8 @@ router.post('/signup', async(req, res) => {
             }
         });
 
-        const token = JWT.sign({id : newUser.id}, JWT_SECRET as string);
         return res.status(201).json({
             Msg : "User created successfully.",
-            token
         });
 
     } catch(error) {
@@ -70,33 +68,38 @@ router.post('/signup', async(req, res) => {
 //SignIn route.
 router.post('/signin', async(req, res) => {
 
-    const body = await req.body;
+    const body = req.body;
     try{
-        const isValid = userSchema.safeParse(body);
+        const isValid = signinInput.safeParse(body);
         if(!isValid.success) {
             return res.status(400).json({
                 error : "Invalid inputs!"
             });
         };
 
-        const hashedPassword = await argon2.hash(body.password);
-        const user = await prisma.user.findUnique({
-            where : {
-                email : body.email,
-                password : hashedPassword, 
+        const User = await prisma.user.findUnique({
+            where: {
+                email: body.email,
             },
         });
 
-        if(!user) {
+        if (!User) {
             return res.status(401).json({
-                error : "User not found!"
+                error: "User not found!"
             });
-        };
+        }
+        const isPasswordValid = await argon2.verify(User.password, body.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                error: "Invalid password!"
+            });
+        }
 
-        const token = JWT.sign({id : user.id}, JWT_SECRET as string);
+        const token = JWT.sign({id : User.id}, JWT_SECRET as string);
         console.log("Welcome to Blogspace.");
         return res.status(202).json({
-            token
+            message : "Welcome to Blogspace",
+            Token : `${token}`
         });
 
     } catch(error) {
@@ -108,24 +111,28 @@ router.post('/signin', async(req, res) => {
 });
 
 //Route to updated the userInfo.
-router.put('/update/info', auth, async(req, res) => {
+router.put('/user/update', auth, async(req, res) => {
 
     const userId = req.userId;
     const newInfo = req.body;
-    const isValid = userSchema.safeParse(newInfo);
+    const isValid = updateUser.safeParse(newInfo);
     if(!isValid.success) {
         return res.status(400).json({
             message : "Error! Invalid input format."
         });
     }
     try {
-        const hashedPassword = await argon2.hash(newInfo.password);
-        const updatedInfo  = await prisma.user.update({
 
+        let hashedPassword;
+        if (newInfo.password) {
+            hashedPassword = await argon2.hash(newInfo.password);
+        }
+
+        const updatedInfo  = await prisma.user.update({
             where : {id : userId},
             data : {
                 email : newInfo.email,
-                password : hashedPassword,
+                password : hashedPassword?  hashedPassword : undefined,
                 name : newInfo.name
             },
         });
@@ -137,8 +144,13 @@ router.put('/update/info', auth, async(req, res) => {
             responseData //returning updated info without password.
         });
 
-    } catch(error) {
+    } catch(error : any) {
         console.error(error);
+        if(error.code === 'P2002') {  
+            return res.status(409).json({
+                message: "Email already in use."
+            });
+        }
         res.status(500).json({
             message : "Error while updating the userInfo",
             error

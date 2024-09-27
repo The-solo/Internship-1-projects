@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import * as express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 import JWT from 'jsonwebtoken';
@@ -18,9 +17,9 @@ declare global {
 export default function auth(req : Request, res : Response, next: NextFunction) { 
     
     const header = req.headers.authorization;
-    if(!header || header.startsWith('Bearer')) {
+    if(!header || !header.startsWith('Bearer')) {
         return res.status(406).json({
-            msg : "Authorization header not found or id invalid."
+            msg : "Authorization token not found or have format mismatch."
         });
     }
 

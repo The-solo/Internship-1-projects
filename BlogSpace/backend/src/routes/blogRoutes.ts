@@ -1,6 +1,6 @@
-import  express  from "express";
+import  express, { response }  from "express";
 import { PrismaClient } from '@prisma/client';
-import { blogSchema } from "../validation/schema.js";
+import { createBlogInput, updateBlogInput} from "../validation/schemas.js";
 import  auth from "../middlewares/auth.js";
 import dotenv from 'dotenv';
 dotenv.config();
@@ -16,51 +16,10 @@ const prisma = new PrismaClient({
     },
 });
 
-//Route to search the blog by title.
-router.get("/search/:title", auth, async (req, res) =>{
-    const { Title } = await req.params;
-
-    if(!Title) {
-        return res.status(400).json({
-            message : "Error!!! name is required"
-        });
-    }
-
-    try{
-        const blogs = await prisma.post.findMany({
-            where: {
-                title: {
-                    contains: Title as string, //partial search.
-                    mode: 'insensitive'
-                }
-            },
-            include : {author : true} //include the author details to promote the blogs.
-        });
-
-        if(blogs.length === 0) {
-            return res.status(404).json({
-                message : `There are no posts titled ${Title}`,
-            });
-        }
-
-        return res.status(200).json({
-            blogs
-        });
-
-    } catch(error) {
-        console.error(error);
-        res.status(500).json({
-            message : "Something went wrong while fetching the blogs.",
-            error
-        });
-    }
-});
-
 //Route to create/initialize the new blog post.
-router.post('/', auth, async(req, res) => {
-
-    const body = await req.body;
-    const isValid = blogSchema.safeParse(body);
+router.post("/", auth, async(req, res) => {
+    const body = req.body;
+    const isValid = createBlogInput.safeParse(body);
     if(!isValid.success) {
         return res.status(400).json({
             message : "Invalid inputs"
@@ -71,13 +30,16 @@ router.post('/', auth, async(req, res) => {
             data : {
                 title : body.title,
                 content : body.content, 
+                published : body.publised,
                 authorId : req.userId as string,
             }
         });
 
+        const {authorId, ...responseData} = post;
+
         return res.status(201).json({
             message : "The post created successfully",
-            data : post
+            responseData
         });
 
     } catch(error) {
@@ -91,13 +53,13 @@ router.post('/', auth, async(req, res) => {
 
 
 //Route retrive all posts published by logged in user.
-router.get("/:id", auth, async(req, res) => {
+router.get("/user/:id", auth, async(req, res) => {
 
-    const reqId = await req.params;
+    const { id } = req.params;
     try{
         const allPosts = await prisma.post.findMany({
             where : { 
-                id : reqId,
+                authorId : id as string,
             }
         });
 
@@ -120,11 +82,55 @@ router.get("/:id", auth, async(req, res) => {
     }
 });
 
+
+//Route to search the blog by title of it.
+router.get("/search/:title", auth, async (req, res) =>{
+    const { title } = req.params;
+
+    if(!title || title.trim() === " "){
+        return res.status(400).json({
+            message : "Error!!! title is required"
+        });
+    }
+
+    try{
+        const blogs = await prisma.post.findMany({
+            where: {
+                published : true,
+                title: {
+                    contains: title as string, //partial search.
+                    mode: 'insensitive',
+                }
+            },
+        });
+
+        const responseData = blogs.map(({ authorId, id, ...blog }) => blog);
+
+        if(responseData.length === 0) {
+            return res.status(404).json({
+                message : `There are no posts titled ${title}`,
+            });
+        }
+
+        return res.status(200).json({
+            responseData
+        });
+
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({
+            message : "Something went wrong while fetching the blogs.",
+            error
+        });
+    }
+});
+
+
 //Route to update the content of the blog.
 router.put("/update", auth, async(req, res) => {
 
     const body = req.body;
-    const isValid = blogSchema.safeParse(body);
+    const isValid = updateBlogInput.safeParse(body);
     if(!isValid.success) {
         return res.status(400).json({
             message : "Error!! Invalid inputs",
@@ -143,9 +149,11 @@ router.put("/update", auth, async(req, res) => {
                 published : body.published,            }
         });
 
+        const { authorId,...responseData } = updatedContent;
+
         return res.status(200).json({
             message : "Blog updated successfully.",
-            updatedContent
+            responseData
         });
 
     } catch (error){
@@ -159,3 +167,7 @@ router.put("/update", auth, async(req, res) => {
 
 
 export default router;
+
+
+
+

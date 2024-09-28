@@ -7,6 +7,7 @@ import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 const JWT_SECRET : string | undefined = process.env.SUPER_SECRET_PASSWORD;
+const pepper : string | undefined = process.env.SECRET_PEPPER;
 const router = express.Router();
 
 
@@ -28,7 +29,8 @@ router.post('/signup', async(req, res) => {
 
         if(!valid.success) {
             return res.status(400).json({
-                Error : "Error! Invalid Input."
+                Error : "Error! Invalid Input.",
+                details: valid.error.format(), 
             });
         };
         const ifExist = await prisma.user.findUnique({
@@ -42,8 +44,8 @@ router.post('/signup', async(req, res) => {
                 Error : "The email already in use."
             });
         };
-        //Hashing the password.
-        const hashedPassword = await argon2.hash(body.password);
+        //Hashing the password with added pepper = extra security.
+        const hashedPassword = await argon2.hash(body.password + pepper);
         const newUser = await prisma.user.create({
             data :{
                 email : body.email,
@@ -54,6 +56,8 @@ router.post('/signup', async(req, res) => {
 
         return res.status(201).json({
             Msg : "User created successfully.",
+            email : newUser.email,
+            name : newUser.name
         });
 
     } catch(error) {
@@ -73,7 +77,7 @@ router.post('/signin', async(req, res) => {
         const isValid = signinInput.safeParse(body);
         if(!isValid.success) {
             return res.status(400).json({
-                error : "Invalid inputs!"
+                error : "Invalid inputs!",
             });
         };
 
@@ -88,7 +92,7 @@ router.post('/signin', async(req, res) => {
                 error: "User not found!"
             });
         }
-        const isPasswordValid = await argon2.verify(User.password, body.password);
+        const isPasswordValid = await argon2.verify(User.password, body.password + pepper);
         if (!isPasswordValid) {
             return res.status(401).json({
                 error: "Invalid password!"
@@ -125,23 +129,23 @@ router.put('/user/update', auth, async(req, res) => {
 
         let hashedPassword;
         if (newInfo.password) {
-            hashedPassword = await argon2.hash(newInfo.password);
+            hashedPassword = await argon2.hash(newInfo.password + pepper);
         }
 
         const updatedInfo  = await prisma.user.update({
             where : {id : userId},
             data : {
-                email : newInfo.email,
+                email : newInfo.email? newInfo.email : undefined,
                 password : hashedPassword?  hashedPassword : undefined,
-                name : newInfo.name
+                name : newInfo.name? newInfo.name : undefined
             },
         });
-
-        const { password, ...responseData } = updatedInfo;
         //excluding the password field for security purposes.
+        const { password, ...responseData } = updatedInfo;
+        
         return res.status(200).json({
             message : "User info updated successfully.",
-            responseData //returning updated info without password.
+            responseData
         });
 
     } catch(error : any) {

@@ -30,7 +30,7 @@ router.post("/", auth, async(req, res) => {
             data : {
                 title : body.title,
                 content : body.content, 
-                published : body.publised,
+                published : body.published,
                 authorId : req.userId as string,
             }
         });
@@ -69,6 +69,7 @@ router.get("/user/posts", auth, async(req, res) => {
             });
         }
 
+        
         return res.status(200).json({
             posts : allPosts
         });
@@ -104,8 +105,8 @@ router.get("/search/:title", auth, async (req, res) =>{
             },
         });
 
+        //excluding the sensetive info since it is the global search.
         const responseData = blogs.map(({ authorId, id, ...blog }) => blog);
-
         if(responseData.length === 0) {
             return res.status(404).json({
                 message : `There are no posts titled ${title}`,
@@ -113,7 +114,7 @@ router.get("/search/:title", auth, async (req, res) =>{
         }
 
         return res.status(200).json({
-            responseData
+            responseData,
         });
 
     } catch(error) {
@@ -136,8 +137,20 @@ router.put("/update", auth, async(req, res) => {
             message : "Error!! Invalid inputs",
         });
     }
-
     try {
+        const existingPost = await prisma.post.findUnique({
+            where: {
+                id: body.id,
+                authorId: req.userId,
+            },
+        });
+        
+        if (!existingPost) {
+            return res.status(404).json({
+                    message: "Post not found or you're not authorized to update it."
+            });
+        }
+
         const updatedContent = await prisma.post.update({
             where : {
                 id : body.id,

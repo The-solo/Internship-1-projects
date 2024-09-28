@@ -29,6 +29,7 @@ export default function auth(req : Request, res : Response, next: NextFunction) 
             message : "Access denied!, no token provided."
         });
     }
+    
     try {   
         const response  = JWT.verify(token, JWT_SECRET as string) as {id : string};
         if(response) {

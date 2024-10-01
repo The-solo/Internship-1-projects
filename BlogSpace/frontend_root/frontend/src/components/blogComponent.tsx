@@ -1,26 +1,29 @@
+import { Link } from "react-router-dom"
+
 
 interface BlogCardProps {
-    authorName : string,
+    id : string,
+    author : {
+        name : string
+    },
     title : string,
     content : string,
-    publishedDate : string,
 }
 
 export const BlogComponent = ({
-    authorName,
+    id,
+    author,
     title,
     content,
-    publishedDate,
+   
 }: BlogCardProps) => {
     return(
-        <div className="mt-10 flex justify-center flex-col border-b">
+        <Link to={`/blogs/${id}`}>
+         <div className="mt-4 flex justify-center flex-col border-b max-w-200 cursor-pointer">
             <div className="text-sm font-xs flex flex-col-2 text-black mb-3">
-                <Avatar name={authorName}/> {authorName}
-                    <div className="font-slate-100 ml-2 font-thin text-sm">
-                        {publishedDate}
-                    </div>
-                </div>
-                <div >
+                <Avatar name={author.name}/> {author.name}
+            </div>
+            <div>
                 <div className="text-xl font-bold">
                     {title}
                 </div>
@@ -28,19 +31,22 @@ export const BlogComponent = ({
                     {content.slice(0,100)}
                 </div>
                 <div className="text-slate-400 text-xs">
-                    {`${Math.floor(Math.random() * (6 - 1 + 1)) + 1} minutes read`}
+                    {`${Math.floor(Math.random() * (7 - 1 + 1)) + 1} minutes read`}
                 </div>
             </div>
         </div>
-    )
+        </Link>
+    )      
 }
 
-function Avatar({name} :{name : string}) {
-    return <div className="mr-1">
-        <div className="relative inline-flex items-center justify-center w-5 h-5 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-            <span className="font-medium text-gray-600 dark:text-gray-300">
-                {name[0]}
-            </span>
+function Avatar({ name }: {name : string}) {
+    return (
+        <div className="mr-1">
+            <div className="relative inline-flex items-center justify-center w-5 h-5 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                <span className="font-medium text-gray-600 dark:text-gray-300">
+                    {name[0]}
+                </span>
+            </div>
         </div>
-    </div>
+    );
 }

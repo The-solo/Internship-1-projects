@@ -29,6 +29,8 @@ model Post {
   title     String   @db.VarChar(255)
   content   String?
   published Boolean  @default(false)
+  published_date DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
   //relation to the Users table using the authorId field and id from User table.
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String 

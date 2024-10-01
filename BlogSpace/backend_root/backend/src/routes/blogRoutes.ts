@@ -6,7 +6,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 const router = express.Router();
 
-
 //Initilizing the global prisma client.
 const prisma = new PrismaClient({
     datasources : {
@@ -17,43 +16,43 @@ const prisma = new PrismaClient({
 });
 
 //Blogs feed 
-router.get("/feed", async(req, res) =>{
-    try{
+router.get("/feed", auth, async (req, res) => {
+    try {
         const allBlogs = await prisma.post.findMany({
-            where : {
-                published : true,
-            }, 
-            select : {
-                title : true,
-                content : true,
-                author : {
-                    select : {
-                        name : true,
-                    }
-                }
-            }
+            where: {
+                published: true,
+            },
+            select: {
+                id : true,
+                title: true,
+                content: true,
+                author: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
         });
 
-        if(!allBlogs){
-            return res.status(401).json({
-                msg : "Error while loading the blogs. "
+        if (!allBlogs || allBlogs.length === 0) {
+            return res.status(404).json({
+                msg: "No blogs available.",
             });
         }
-        
-        res.status(200).json({
-            allBlogs,
-        });
 
-    } catch(error) {
-        console.error(error);
-        res.status(401).json({
-            msg : "Error!! Internal server error."
+        res.status(200).json({
+            allBlogs
+        });
+    } catch (error) {
+        console.error("Error fetching blogs:", error);
+        res.status(500).json({
+            msg: "Error! Internal server error.",
         });
     }
 });
 
 //Route to create/initialize the new blog post.
-router.post("/create-post", auth, async(req, res) => {
+router.post("/create", auth, async(req, res) => {
     const body = req.body;
     const isValid = createBlogInput.safeParse(body);
     if(!isValid.success) {
@@ -88,25 +87,28 @@ router.post("/create-post", auth, async(req, res) => {
 });
 
 
-//Route retrive all posts published by logged in user.
-router.get("/posts", auth, async(req, res) => {
+//Route to get the specific post by authorID
+router.get("/:id", auth, async(req, res) => {
 
-    const authorID = req.userId;
+    const reqId = req.params.id;
     try{
-        const allPosts = await prisma.post.findMany({
-            where : { 
-                authorId : authorID,
+        const allBlogs = await prisma.post.findFirst({
+            where : {
+                id : reqId,
+
+            }, select : {
+                title : true,
+                content : true,
+                author : {
+                    select : { 
+                        name : true,
+                    }
+                }
             }
         });
 
-        if(allPosts.length === 0) { 
-            return res.status(400).json({
-                message : "You haven't published any blogs yet."
-            });
-        }
-        
         return res.status(200).json({
-            posts : allPosts
+            allBlogs
         });
 
     } catch(error) {
@@ -117,53 +119,6 @@ router.get("/posts", auth, async(req, res) => {
         });
     }
 });
-
-
-//Route to search the blog post by ID
-router.get("/search/:id", auth, async (req, res) =>{
-    const body = req.params;
-
-    if(!body.id) {
-        return res.status(401).json({
-            msg : "Id not provided."
-        });
-    }
-
-    try{
-        const blogs = await prisma.post.findMany({
-            where: {
-                id : body.id,
-            },
-            select : {
-                title : true,
-                content : true,
-                author : {
-                    select : {
-                        name : true,
-                    }
-                }
-            }
-        });
-
-        if(blogs.length === 0) {
-            return res.status(404).json({
-                message : `There are no posts.`,
-            });
-        }
-
-        return res.status(200).json({
-            blogs
-        });
-
-    } catch(error) {
-        console.error(error);
-        res.status(500).json({
-            message : "Error!! Something went wrong.",
-            error
-        });
-    }
-});
-
 
 //Route to update the content of the blog.
 router.put("/update", auth, async(req, res) => {

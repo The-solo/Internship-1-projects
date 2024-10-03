@@ -3,6 +3,7 @@ import { Blog } from "../hooks/blogHook";
 import { AvatarSmall } from "./blogComponent";
 
 export const SingleBlog = ({ oneBlog }: { oneBlog: Blog }) => {
+    
     if (!oneBlog) {
         return <div>No Blog found.</div>;
     }

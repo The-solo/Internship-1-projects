@@ -104,7 +104,8 @@ router.post('/signin', async(req, res) => {
         console.log("Welcome to Blogspace.");
         return res.status(202).json({
             message : "Welcome to Blogspace",
-            token : token
+            token : token,
+            username : User.name
         });
 
     } catch(error) {

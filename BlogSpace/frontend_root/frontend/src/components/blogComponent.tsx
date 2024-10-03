@@ -18,7 +18,7 @@ export const BlogComponent = ({
 }: BlogCardProps) => {
     return(
         <Link to={`/blogs/${id}`}>
-         <div className="mt-4 flex justify-center flex-col border-b max-w-200 cursor-pointer bg-slate-50">
+         <div className="mt-4 flex justify-center flex-col border-b max-w-200 cursor-pointer">
             <div className="text-sm font-xs flex flex-col-2 text-black mb-3">
                 <AvatarSmall name={author.name}/> {author.name}
             </div>

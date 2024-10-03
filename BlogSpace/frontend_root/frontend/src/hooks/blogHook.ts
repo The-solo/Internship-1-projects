@@ -13,12 +13,9 @@ export interface Blog {
     author: Author;
 }
 
-
 interface BlogResponse {
     allBlogs: Blog[]; //type here is Array of Blogs which isn't required in the useSingleBlog hook.
 }
-
-
 
 //for singel blog route with id : 
 export const useSingleBlog = ({id} : {id : string}) => {
@@ -47,7 +44,6 @@ export const useSingleBlog = ({id} : {id : string}) => {
     }, [id]);
     
     return { loading, blog}; 
-  
 }
 
 

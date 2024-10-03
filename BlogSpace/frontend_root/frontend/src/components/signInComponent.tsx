@@ -21,6 +21,7 @@ const signInAuth = () => {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, postInputs); //passing the body.
             const jwt =  response.data.token;
             localStorage.setItem("token", jwt);
+            localStorage.setItem("username", response.data.username);
             navigate("/Blogs");
         } catch(error) {
             console.log("Error while signing in."+ error);

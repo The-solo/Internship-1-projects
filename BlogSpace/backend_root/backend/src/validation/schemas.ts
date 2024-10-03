@@ -19,7 +19,7 @@ export const updateUser = z.object({
 
 export const createBlogInput = z.object({
     title : z.string().max(255),
-    content : z.string().optional(),
+    content : z.string(),
     published : z.boolean().default(false),
 });
 

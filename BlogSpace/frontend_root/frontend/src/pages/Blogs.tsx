@@ -23,6 +23,7 @@ export const Blogs = () => {
                 <div>
                     {blogs.map(blog => (
                         <BlogComponent
+                            key={blog.id}
                             id={blog.id}
                             author={blog.author || "Anonymyous"} 
                             title={blog.title}  

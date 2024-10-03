@@ -28,7 +28,7 @@ router.get("/feed", auth, async (req, res) => {
                 content: true,
                 author: {
                     select: {
-                        name: true,
+                        name: true || null,
                     },
                 },
             },
@@ -92,23 +92,30 @@ router.get("/:id", auth, async(req, res) => {
 
     const reqId = req.params.id;
     try{
-        const allBlogs = await prisma.post.findFirst({
+        const blog = await prisma.post.findUnique({
             where : {
                 id : reqId,
 
             }, select : {
+                id : true,
                 title : true,
                 content : true,
                 author : {
                     select : { 
-                        name : true,
+                        name : true || "Anonymous-User",
                     }
                 }
             }
         });
 
+        if (!blog) {
+            return res.status(404).json({ 
+                message: "Post not found" 
+            });
+        }
+        
         return res.status(200).json({
-            allBlogs
+            blog
         });
 
     } catch(error) {

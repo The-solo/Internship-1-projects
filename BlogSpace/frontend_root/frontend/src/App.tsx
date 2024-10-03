@@ -3,7 +3,9 @@ import { Signin } from "./pages/Signin";
 import { Signup } from "./pages/Signup";
 import { Blogs }  from "./pages/Blogs";
 import { Landing } from "./pages/landing";
-import { Blog } from "./pages/Blog" 
+import { BlogPage } from "./pages/Blog";
+import { Publish } from "./pages/publish";
+
 
 function App() {
   return (
@@ -14,7 +16,8 @@ function App() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/signin" element={<Signin/>}/>
         <Route path="/blogs" element={<Blogs/>}/>
-        <Route path={`/blogs/${Blogs.arguments.id}`} element={<Blog/>}/>
+        <Route path={`/blogs/:id`} element={<BlogPage/>}/>
+        <Route path="/publish" element={<Publish/>}/>
       </Routes>
     </BrowserRouter>
     </>

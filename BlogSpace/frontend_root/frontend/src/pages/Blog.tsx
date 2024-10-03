@@ -1,11 +1,10 @@
-import { useBlog } from "../hooks/blogHook"
+import { Blog, useSingleBlog} from "../hooks/blogHook"
 import { useParams } from "react-router-dom";
-import { singleBlog } from "../components/singleBlogComponent";
+import { SingleBlog } from "../components/singleBlogComponent";
 
-export const Blog = () => {
-
-    const { id} = useParams();
-    const { loading, blog } = useBlog({
+export const BlogPage = () => {
+    const { id } = useParams();
+    const { loading, blog }  = useSingleBlog({
         id : id || ""
     });
 
@@ -14,6 +13,6 @@ export const Blog = () => {
     }
 
     return <div>
-        The Single blog component is rendering here.
+        <SingleBlog oneBlog={blog as Blog}/>
      </div>
 }

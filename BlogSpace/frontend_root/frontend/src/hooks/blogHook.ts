@@ -6,49 +6,49 @@ interface Author {
     name: string;
 }
 
-interface Blog {
+export interface Blog {
     id : string,
     title: string;
     content: string;
     author: Author;
 }
 
+
 interface BlogResponse {
-    allBlogs: Blog[]; 
+    allBlogs: Blog[]; //type here is Array of Blogs which isn't required in the useSingleBlog hook.
 }
 
+
+
 //for singel blog route with id : 
-export const useBlog = ({id} : {id : string}) => {
+export const useSingleBlog = ({id} : {id : string}) => {
+
     const [loading, setLoading] = useState(true);
-    const [blog, setBlog] = useState<Blog[]>([]);
-    // Function to fetch blogs
+    const [blog, setBlogs] = useState<Blog | null>(null); //The type of blog is either a single blog or null.
+
     const fetchBlogs = async() => {
         try {
-            const response = await axios.get<BlogResponse>(`${BACKEND_URL}/api/v1/blogs/${id}`, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}`
-
-                 }  // Authorization header
+                    //Making sure the type of the response here is just Blog and not Blog[] 
+             const response = await axios.get<{blog : Blog}>(`${BACKEND_URL}/api/v1/blogs/${id}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` 
+                    
+                 } 
             });
-            
-            // Access blog here
-            setBlog(response.data.allBlogs || []);
-            setLoading(false)
+            setBlogs(response.data.blog);
+            setLoading(false);
             
         } catch (error) {
             console.error("Error fetching blogs:", error);
-        } 
-        
+        }  
     };
 
     useEffect(() => {
         fetchBlogs();
-        const intervalId = setInterval(fetchBlogs); 
-        return () => clearInterval(intervalId);
     }, [id]);
-
-    return { loading, blog }; 
+    
+    return { loading, blog}; 
+  
 }
-
 
 
 //To get the preview of all the blogposts availabel
@@ -56,15 +56,13 @@ export const useBlogs = () => {
     const [loading, setLoading] = useState(true);
     const [blogs, setBlogs] = useState<Blog[]>([]);
 
-    // Function to fetch blogs
     const fetchBlogs = async() => {
         try {
              const response = await axios.get<BlogResponse>(`${BACKEND_URL}/api/v1/blogs/feed`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` 
                     
-                 }  // Authorization header
+                 } 
             });
-            // Access allBlogs instead of blog
             setBlogs(response.data.allBlogs || []);
             setLoading(false)
             
@@ -75,7 +73,7 @@ export const useBlogs = () => {
 
     useEffect(() => {
         fetchBlogs();
-        const intervalId = setInterval(fetchBlogs, 600000); // Fetch every 10 minutes
+        const intervalId = setInterval(fetchBlogs, 600000); // Fetch every 10 minutes should be something like 1 min.
         return () => clearInterval(intervalId);
     }, []);
     

@@ -10,6 +10,12 @@ export const Blogs = () => {
         return <div>Loading.....</div>;
     }
 
+    if(blogs.length === 0) {
+        return <div>
+            No Published Blogs available.
+        </div>
+    }
+
     return (
         <div>
             <Appbar/>

@@ -1,19 +1,19 @@
 import { BlogComponent } from "../components/blogComponent";
 import { Appbar } from "../components/appbarComponent";
 import { useBlogs } from "../hooks/blogHook";
+import { useNavigate } from "react-router-dom";
 
 export const Blogs = () => {
 
+    const navigate = useNavigate();
     const { loading, blogs } = useBlogs();
 
     if (loading) {
-        return <div>Loading.....</div>;
+        navigate("/publish");   
     }
 
     if(blogs.length === 0) {
-        return <div>
-            No Published Blogs available.
-        </div>
+        navigate("/publish");
     }
 
     return (

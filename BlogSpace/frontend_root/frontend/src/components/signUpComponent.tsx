@@ -16,7 +16,7 @@ const signUpAuth = () => {
 
     async function sendRequest(){
         try{
-            await axios.post(`${BACKEND_URL}/api/v1/user/signup`, postInputs); //sending the body
+            await axios.post(`${BACKEND_URL}/api/v1/user/signup`, postInputs); 
             navigate("/signin");
         } catch(error) {
             console.log("Error while signing up." + error);
@@ -25,6 +25,12 @@ const signUpAuth = () => {
 
     return (
         <div>
+            <Link to="/"
+                className="">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+                    </svg>
+                </Link>
             <div className="grid bg-white bg-blend-screen justify-center mt-12">
                 <div className="text-3xl font-black">
                     Create an account {/* mentioning the type here for both signUp and SignIn*/}

@@ -5,7 +5,6 @@ import { signinInput, signupInput, updateUser } from "../validation/schemas.js";
 import  auth from "../middlewares/auth.js";
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { date } from "zod";
 dotenv.config();
 const JWT_SECRET : string | undefined = process.env.SUPER_SECRET_PASSWORD;
 const pepper : string | undefined = process.env.SECRET_PEPPER;
@@ -170,7 +169,7 @@ router.put('/update', auth, async(req, res) => {
 //Route for the profile pic of a user.
 router.get("/profile", auth, async(req, res) => {
 
-    const userID : string = req.userId;
+    const userID = req.userId;
     try{
         const profile = await prisma.user.findUnique({
             where : {
@@ -191,13 +190,7 @@ router.get("/profile", auth, async(req, res) => {
                 content : true,
                 id : true,
             },
-        });
-
-        if(Blogs.length === 0) {
-            return res.status(401).json({
-                msg : "No blogs availabel."
-            });
-        }   
+        }); 
 
         return res.status(200).json({
             profile,
@@ -212,5 +205,31 @@ router.get("/profile", auth, async(req, res) => {
     }
 });
 
+
+
+//for verification of the user.
+router.post('/verifyToken', async(req, res) => {
+    const token = await req.body.token;
+    if (!token) {
+      return res.status(401).json({
+            message: 'Unauthorized' 
+        });
+    } 
+    try{
+        const Verified = JWT.verify(token, JWT_SECRET as string) ;
+
+        if(!Verified) {
+            return res.status(403).json({
+                msg : "Access denied!!!"
+            });
+        }
+        res.status(200).json({
+            msg  : "The token is valid, Welcome",
+        });
+
+    } catch(error) {
+        throw error
+    }
+  });
 
 export default router;

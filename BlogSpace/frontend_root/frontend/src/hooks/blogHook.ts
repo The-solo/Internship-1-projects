@@ -60,7 +60,7 @@ export const useBlogs = () => {
                  } 
             });
             setBlogs(response.data.allBlogs || []);
-            setLoading(false)
+            setLoading(false);
             
         } catch (error) {
             console.error("Error fetching blogs:", error);

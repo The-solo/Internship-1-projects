@@ -6,8 +6,8 @@ import axios from "axios";
 import { BACKEND_URL} from '../config';
 
 
-
 export const signInAuth = () => {
+
     //state varible that uses defined types for inputs.(frontend typecheking.)
     const navigate = useNavigate();
     const [postInputs, setPosstInputs] = useState<signinInput>({
@@ -30,7 +30,14 @@ export const signInAuth = () => {
     
     return (
         <div>
+             <Link to="/"
+                    className="">
+                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+                    </svg>
+                </Link>
             <div className="grid bg-white bg-blend-screen justify-center mt-24">
+               
                 <div className="text-3xl font-black mt-5">
                 Let's dive into blogging!{/* mentioning the type here for both signUp and SignIn*/}
                 </div>

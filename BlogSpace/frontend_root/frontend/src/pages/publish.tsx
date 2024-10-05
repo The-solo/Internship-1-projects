@@ -11,7 +11,7 @@ export const Publish = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [published, setPublished] = useState(false);
-    const [loading, setLoading] = useState(true); // Initial state set to false.
+    const [loading, setLoading] = useState(true); // Initial state true.
 
     async function CreatePost() {
         if (!title || !content) {
@@ -25,11 +25,15 @@ export const Publish = () => {
                 content,
                 published,
             },
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+            { headers: { 
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+                } 
+            });
 
             const ID = response.data.responseData.id;
             navigate(`/blogs/${ID}`);
             setLoading(false);
+
         } catch (error) {
             console.log("Error while creating the post.", error);
         }
@@ -67,7 +71,9 @@ export const Publish = () => {
                         <input
                             type="checkbox"
                             checked={published}
-                            onChange={(e) => setPublished(e.target.checked)} // Toggle button.
+                            onChange={(e) => 
+                                setPublished(e.target.checked)
+                            } // Toggle button.
                             className="form-checkbox size-4"
                         />
                         <span className="ml-2 text-xl font-black text-gray-500 mt-1">

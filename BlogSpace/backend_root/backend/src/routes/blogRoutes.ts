@@ -34,20 +34,15 @@ router.get("/feed", auth, async (req, res) => {
             },
         });
 
-        if (!allBlogs || allBlogs.length === 0) {
-            return res.status(404).json({
-                msg: "No blogs available.",
-            });
-        }
-
+    
         res.status(200).json({
             allBlogs
         });
     } catch (error) {
-        console.error("Error fetching blogs:", error);
         res.status(500).json({
             msg: "Error! Internal server error.",
         });
+        throw error
     }
 });
 
@@ -73,16 +68,15 @@ router.post("/create", auth, async(req, res) => {
         const {authorId, ...responseData} = post;
 
         return res.status(201).json({
-            message : "The post created successfully",
             responseData
         });
 
     } catch(error) {
-        console.error(error);
         res.status(500).json({
             message : "Error!! Something went wrong.",
             error
         });
+        throw error;
     }
 });
 
@@ -119,11 +113,11 @@ router.get("/:id", auth, async(req, res) => {
         });
 
     } catch(error) {
-        console.error(error);
         res.status(500).json({
             message : "Problem fetching the posts.",
             error
         });
+        throw error
     }
 });
 

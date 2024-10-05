@@ -17,7 +17,7 @@ export const SingleBlog = ({ oneBlog }: { oneBlog: Blog }) => {
                 </div>
 
                 {/* Author Section */}
-                <div className="absolute top-0 right-0 flex items-center pr-40 mt-28">
+                <div className="absolute top-0 right-0 flex items-center pr-56 pt-28">
                     <div className="text-slate-600 text-md font-serif">Author:</div>
                     <div className="pl-2">
                         <AvatarSmall name={oneBlog.author.name} />

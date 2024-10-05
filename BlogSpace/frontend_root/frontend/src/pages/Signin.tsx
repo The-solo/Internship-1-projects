@@ -1,4 +1,4 @@
-import signInAuth from './../components/signInComponent';
+import { signInAuth } from './../components/signInComponent';
 import blogging from "./../assets/blogging.jpg";
 
 export const Signin = () => {

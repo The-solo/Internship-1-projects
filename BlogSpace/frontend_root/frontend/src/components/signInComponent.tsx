@@ -7,7 +7,7 @@ import { BACKEND_URL} from '../config';
 
 
 
-const signInAuth = () => {
+export const signInAuth = () => {
     //state varible that uses defined types for inputs.(frontend typecheking.)
     const navigate = useNavigate();
     const [postInputs, setPosstInputs] = useState<signinInput>({
@@ -74,5 +74,3 @@ const signInAuth = () => {
     )
 }
 
-
-export default signInAuth;

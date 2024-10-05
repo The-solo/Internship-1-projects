@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-interface BlogCardProps {
+export interface BlogCardProps {
     id : string,
     author : {
         name : string
@@ -17,8 +17,8 @@ export const BlogComponent = ({
    
 }: BlogCardProps) => {
     return(
-        <Link to={`/blogs/${id}`}>
-         <div className="mt-4 flex justify-center flex-col border-b max-w-200 cursor-pointer">
+        <Link to={`/blogs/${id}`} className="">
+         <div className="mt-8 flex justify-center flex-col border-b max-w-200 cursor-pointer bg-slate-50">
             <div className="text-sm font-xs flex flex-col-2 text-black mb-3">
                 <AvatarSmall name={author.name}/> {author.name}
             </div>
@@ -41,7 +41,7 @@ export const BlogComponent = ({
 export function AvatarSmall({ name }: {name : string}) {
     return (
         <div className="mr-1">
-            <div className="relative inline-flex items-center justify-center w-5 h-5 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+            <div className="relative inline-flex items-center justify-center w-5 h-5 overflow-hidden bg-gray-100 rounded-full dark:bg-zinc-700">
                 <span className="font-medium text-gray-600 dark:text-gray-300">
                     {name[0]}
                 </span>

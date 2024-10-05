@@ -1,6 +1,7 @@
 import { Blog, useSingleBlog} from "../hooks/blogHook"
 import { useParams } from "react-router-dom";
 import { SingleBlog } from "../components/singleBlogComponent";
+import { Loading } from "../components/skelaton";
 
 export const BlogPage = () => {
     const { id } = useParams();
@@ -9,7 +10,9 @@ export const BlogPage = () => {
     });
 
     if(loading) {
-        return <div>Loading.....</div>;
+        return <div>
+            {Loading()}
+        </div>
     }
 
     return <div>

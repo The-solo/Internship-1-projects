@@ -5,6 +5,7 @@ import { signinInput, signupInput, updateUser } from "../validation/schemas.js";
 import  auth from "../middlewares/auth.js";
 import JWT from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { date } from "zod";
 dotenv.config();
 const JWT_SECRET : string | undefined = process.env.SUPER_SECRET_PASSWORD;
 const pepper : string | undefined = process.env.SECRET_PEPPER;
@@ -161,6 +162,52 @@ router.put('/update', auth, async(req, res) => {
         res.status(500).json({
             message : "Error while updating the userInfo",
             error
+        });
+    }
+});
+
+
+//Route for the profile pic of a user.
+router.get("/profile", auth, async(req, res) => {
+
+    const userID : string = req.userId;
+    try{
+        const profile = await prisma.user.findUnique({
+            where : {
+                id : userID,
+            }, 
+            select : {
+                name : true,  
+                email : true, 
+            } 
+        });
+
+        const Blogs = await prisma.post.findMany({
+            where : {
+                authorId : req.userId,
+            }, 
+            select : {
+                title : true,
+                content : true,
+                id : true,
+            },
+        });
+
+        if(Blogs.length === 0) {
+            return res.status(401).json({
+                msg : "No blogs availabel."
+            });
+        }   
+
+        return res.status(200).json({
+            profile,
+            Blogs,
+        });
+
+    } catch(error) {
+        res.status(500).json({
+            msg : "Something went wrong while fetching the user Info.",
+            error,
         });
     }
 });

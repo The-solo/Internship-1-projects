@@ -16,10 +16,8 @@ const signUpAuth = () => {
 
     async function sendRequest(){
         try{
-            const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, postInputs); //sending the body
-            const msg : string = response.data;
+            await axios.post(`${BACKEND_URL}/api/v1/user/signup`, postInputs); //sending the body
             navigate("/signin");
-            console.log(msg);
         } catch(error) {
             console.log("Error while signing up." + error);
         }

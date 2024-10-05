@@ -2,6 +2,7 @@ import { BlogComponent } from "../components/blogComponent";
 import { Appbar } from "../components/appbarComponent";
 import { useBlogs } from "../hooks/blogHook";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../components/skelaton";
 
 export const Blogs = () => {
 
@@ -9,7 +10,10 @@ export const Blogs = () => {
     const { loading, blogs } = useBlogs();
 
     if (loading) {
-        navigate("/publish");   
+        return <div>
+            {Loading()}
+        </div>
+  
     }
 
     if(blogs.length === 0) {

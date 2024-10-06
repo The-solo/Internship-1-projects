@@ -18,4 +18,4 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-export default app; //exporting a whole application as function for vercel deployment.
+module.exports = app; //exporting a whole application as function for vercel deployment.

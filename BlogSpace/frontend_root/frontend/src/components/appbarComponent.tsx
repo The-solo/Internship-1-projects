@@ -2,9 +2,8 @@
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 
-
 export const Appbar  = () => {
-
+    
     const navigate = useNavigate();
     const name = localStorage.getItem("username"); 
 
@@ -65,11 +64,14 @@ export const Appbar  = () => {
         </div>
 }   
 
+
+
 function Avatar({name} :{name : string}) {
+    const DefaultName : string = "Anonymous";
     return <div className="mr-1">
         <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-zinc-800 rounded-full">
             <span className="font-semibold text-white">
-                {name[0]}
+                {name[0] || DefaultName[0]}
             </span>
         </div>
     </div>

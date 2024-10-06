@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
 
 export function ProfileComponent({ name, email }: { name: string; email: string }) {
+    const DefaultName : string = "Anonymous";
 
     return (<div>
                 <div className="flex flex-col pt-32 px-24 bg-slate-100 h-screen items-center">
                     <div className="flex flex-col max-w-md p-12 bg-violet-200 dark:text-gray-800 items-center ">
                         <div className="flex-shrink-0 w-full h-40 sm:h-32 sm:w-32 sm:mb-0 justify-center">
-                            <Avatar name={name} />
+                            <Avatar name={name}/>
                         </div>
                         <div className="flex flex-col">
                             <div className="justify-center">
                                 <div className="flex justify-center text-md dark:text-gray-700 mt-2">Author</div>
-                                <h2 className="text-2xl font-semibold flex justify-center">{name}</h2>
+                                <h2 className="text-2xl font-semibold flex justify-center">{name || DefaultName}</h2>
                                 <div className="dark:text-black text-xl py-5">{email}</div>
                             </div>
                         </div>
@@ -34,10 +35,11 @@ export function ProfileComponent({ name, email }: { name: string; email: string 
 }
 
 function Avatar({ name }: { name: string }) {
+    const DefaultName : string = "Anonymous";
     return (
         <div className="relative inline-flex items-center justify-center w-32 h-32 overflow-hidden bg-gray-100 rounded-full dark:bg-zinc-700">
             <span className="font-extrabold text-gray-600 dark:text-gray-300 text-6xl">
-                {name[0]}
+                {name[0] || DefaultName[0]}
             </span>
         </div>
     );

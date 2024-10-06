@@ -3,6 +3,8 @@ import { Blog } from "../hooks/blogHook";
 import { AvatarSmall } from "./blogComponent";
 
 export const SingleBlog = ({ oneBlog }: { oneBlog: Blog }) => {
+
+    const DefaultName : string = "Anonymous";
     if (!oneBlog) {
         return <div>No Blog found.</div>;
     }
@@ -20,9 +22,9 @@ export const SingleBlog = ({ oneBlog }: { oneBlog: Blog }) => {
                 <div className="absolute top-0 right-0 flex items-center pr-56 pt-28">
                     <div className="text-slate-600 text-md font-serif">Author:</div>
                     <div className="pl-2">
-                        <AvatarSmall name={oneBlog.author.name} />
+                        <AvatarSmall name={oneBlog.author.name || DefaultName} />
                     </div>
-                    <div className="text-2xl font-bold pl-2">{oneBlog.author.name}</div>
+                    <div className="text-2xl font-bold pl-2">{oneBlog.author.name || DefaultName}</div>
                 </div>
             </div>
         </div>

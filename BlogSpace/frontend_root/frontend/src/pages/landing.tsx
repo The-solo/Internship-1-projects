@@ -37,14 +37,14 @@ export const Landing = () =>{
         <div className="bg-purple-100 h-screen">
             <div className="flex text-6xl py-8 ml-36 font-black">Blogspace</div>
             <div className="flex flex-row absolute top-0 right-0 mr-36 pt-8 pl-6">
-                <button className="hover:text-slate-500 font-sans text-lg mt-4 mr-4 underline underline-offset-1">Membership</button>
+                <button className="hover:text-slate-500 font-sans text-lg mt-5 mr-4 underline underline-offset-1">Membership</button>
                 <button 
                     className="hover:text-slate-500 font-sans text-lg mt-6 mr-4 underline underline-offset-1 mb-1"
                     onClick={handlePublishClick}
                     >Explore 
                 </button>
                 <div className="flex mt-3">
-                    <Link to={"/signin"}className="hover:text-slate-500 text-lg mt-3 ml-2 underline underline-offset-1">Sign In</Link>
+                    <Link to={"/signin"}className="hover:text-slate-500 text-lg mt-3 ml-1 underline underline-offset-1">Sign In</Link>
                 </div>
                 <Link to="/signup"className="py-2.5 px-5 text-white text-sm rounded-full border hover:bg-slate-600 focus:z-10 dark:bg-black font-sans mx-4 mt-4">
                     Get Started

@@ -50,7 +50,7 @@ router.post('/signup', async(req, res) => {
             data :{
                 email : body.email,
                 password : hashedPassword,
-                name : body.name
+                name : body.name?? null
             }
         });
 

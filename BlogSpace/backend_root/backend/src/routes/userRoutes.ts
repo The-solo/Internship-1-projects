@@ -62,7 +62,7 @@ router.post('/signup', async(req, res) => {
 
     } catch(error) {
         console.error(error);
-        res.status(500).json({
+        return res.status(500).json({
             message : "Something went wrong.",
             error
         });
@@ -110,7 +110,7 @@ router.post('/signin', async(req, res) => {
 
     } catch(error) {
         console.error(error);
-        res.status(401).json({
+        return res.status(401).json({
             message : error 
         });
     }
@@ -158,7 +158,7 @@ router.put('/update', auth, async(req, res) => {
                 message: "Email already in use."
             });
         }
-        res.status(500).json({
+        return res.status(500).json({
             message : "Error while updating the userInfo",
             error
         });
@@ -228,7 +228,9 @@ router.post('/verifyToken', async(req, res) => {
         });
 
     } catch(error) {
-        throw error
+        return res.status(500).json({
+            msg : "Something went wrong."
+        })
     }
   });
 

@@ -39,10 +39,9 @@ router.get("/feed", auth, async (req, res) => {
             allBlogs
         });
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             msg: "Error! Internal server error.",
         });
-        throw error
     }
 });
 
@@ -72,11 +71,10 @@ router.post("/create", auth, async(req, res) => {
         });
 
     } catch(error) {
-        res.status(500).json({
+        return res.status(500).json({
             message : "Error!! Something went wrong.",
             error
         });
-        throw error;
     }
 });
 
@@ -113,11 +111,10 @@ router.get("/:id", auth, async(req, res) => {
         });
 
     } catch(error) {
-        res.status(500).json({
+        return res.status(500).json({
             message : "Problem fetching the posts.",
             error
         });
-        throw error
     }
 });
 
@@ -165,7 +162,7 @@ router.put("/update", auth, async(req, res) => {
 
     } catch (error){
         console.error(error);
-        res.status(500).json({
+        return res.status(500).json({
             message : "Something went wrong!!",
             error
         });

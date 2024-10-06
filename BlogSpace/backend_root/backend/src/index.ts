@@ -11,5 +11,12 @@ app.use("/*", cors());
 app.use("/api/v1/user", userRouter);//routing all the user routes.
 app.use("/api/v1/blogs", blogRouter);// routing all the blog routes.
 
+const PORT = process.env.PORT;
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
 
 export default app; //exporting a whole application as function for vercel deployment.

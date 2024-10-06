@@ -14,7 +14,7 @@ app.use("/api/v1/blogs", blogRouter);// routing all the blog routes.
 const PORT = process.env.PORT;
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port....`);
   });
 }
 

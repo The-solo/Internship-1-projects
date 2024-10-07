@@ -14,7 +14,7 @@ app.use("/api/v1/blogs", blogRouter);// routing all the blog routes.
 
 
 app.listen(PORT, () => {
-  console.log(`Server is up & running....`);
+  console.log(`Server is up & running at port ${PORT}`);
 });
 
 

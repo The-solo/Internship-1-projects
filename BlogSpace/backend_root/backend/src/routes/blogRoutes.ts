@@ -10,7 +10,7 @@ const router = express.Router();
 const prisma = new PrismaClient({
     datasources : {
         db :{
-            url : process.env.POOLING_DB_URL,
+            url : process.env.DATABASE_URL,
         },
     },
 });

@@ -20,14 +20,14 @@ export const Appbar  = () => {
     }
 
     return <div className="border-b flex justify-between px-20 py-4 bg-emerald-50 items-center">
-                <Link to="/blogs">
+                <Link to="/">
                     <div className="font-black text-3xl">
                         Blogspace
                     </div>
                 </Link>
             <div className="flex flex-row items-end px-5">
                 <div className="flex px-2 py-2 mr-2">
-                    <Link to="/">
+                    <Link to="/blogs">
                         <svg xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24" 

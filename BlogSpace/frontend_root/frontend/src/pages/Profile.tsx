@@ -3,6 +3,7 @@ import { ProfileComponent } from "../components/profileComponent";
 import { BlogComponent } from "../components/blogComponent";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import Loading from "../components/skelaton"
 
 interface Profile {
     profile: {
@@ -39,9 +40,7 @@ export const ProfilePage = () => {
     }, []);
 
     if (!profile) {
-        return <div>
-            No profile found
-        </div>;
+        return Loading
     }
 
     return (

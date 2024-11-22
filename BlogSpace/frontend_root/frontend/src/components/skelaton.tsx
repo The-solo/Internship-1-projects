@@ -1,6 +1,6 @@
 
 
-export function Loading() {
+export default  function Loading() {
     return <div>
         <div className="grid min-h-[140px] w-full place-items-center overflow-x-scroll rounded-lg p-6 lg:overflow-visible py-80">
             <svg className="w-16 h-16 animate-spin text-gray-900/50" viewBox="0 0 64 64" fill="none"

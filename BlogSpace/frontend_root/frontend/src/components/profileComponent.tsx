@@ -24,7 +24,7 @@ export function ProfileComponent({ name, email }: { name: string; email: string 
                             strokeWidth={1.5} 
                             type="button"
                             stroke="currentColor" 
-                            className="size-6 bg-black mt-6 text-white rounded-full w-20 h-10 ">
+                            className="size-6 bg-black hover:bg-slate-700 mt-6 text-white rounded-full w-20 h-10 ">
                             <path strokeLinecap="round" 
                                 strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                         </svg>

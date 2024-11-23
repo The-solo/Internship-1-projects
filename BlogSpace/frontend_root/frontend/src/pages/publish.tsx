@@ -40,68 +40,70 @@ export const Publish = () => {
     }
 
     return (
-        <div className="bg-slate-50">
+        <div className="bg-slate-50 min-h-screen">
             <Appbar />
-            <div className="">
-                <div className="px-96 ml-4 pb-4">
-                    <label
-                        htmlFor="title" //This should match the id in label.
-                        className="block mb-2 text-2xl font-medium text-gray-500"
-                    >
-                        Title
-                    </label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        className="bg-gray-100 border border-gray-400 text-2xl rounded-lg focus:ring-blue-500 focus:border-blue-400 block p-2.5 w-auto"
-                        placeholder="Title"
-                        required
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
-            </div>
-            <div className="flex justify-center">
-                <TextForm onChange={(e) => setContent(e.target.value)} />
-            </div>
-
-            <div className="flex justify-center mt-4">
-                <div className="flex items-center space-x-4">
-                    <label className="inline-flex items-center">
+            <div className="flex justify-center mt-8">
+                <div className="w-full max-w-2xl px-4">
+                    {/*Title Input*/}
+                    <div className="pb-4">
+                        <label
+                            htmlFor="title"
+                            className="block mb-2 text-xl font-medium text-gray-500"
+                        >
+                            Title
+                        </label>
                         <input
-                            type="checkbox"
-                            checked={published}
-                            onChange={(e) => 
-                                setPublished(e.target.checked)
-                            } // Toggle button.
-                            className="form-checkbox size-4"
+                            type="text"
+                            id="title"
+                            name="title"
+                            className="bg-gray-100 border border-gray-400 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-400 block w-full p-2.5"
+                            placeholder="Title"
+                            required
+                            onChange={(e) => setTitle(e.target.value)}
                         />
-                        <span className="ml-2 text-xl font-black text-gray-500 mt-1">
-                            Publish Post
-                        </span>
-                    </label>
-
-                    <button
-                        type="submit"
-                        className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-100 font-medium rounded-full text-lg px-10 py-2"
-                        onClick={CreatePost}
-                    >
-                        {loading ? "Create" : "Saving..."}
-                    </button>
+                    </div>
+    
+                    <div className="pb-4">
+                        <TextForm onChange={(e) => setContent(e.target.value)} />
+                    </div>
+    
+                    <div className="flex items-center justify-between mt-4">
+                        
+                        <label className="inline-flex items-center">
+                            <input
+                                type="checkbox"
+                                checked={published}
+                                onChange={(e) => setPublished(e.target.checked)}
+                                className="form-checkbox h-6 w-6 text-green-600"
+                            />
+                            <span className="ml-2 text-xl font-black text-gray-500">
+                                Publish Post
+                            </span>
+                        </label>
+    
+                        <button
+                            type="submit"
+                            className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-100 font-medium rounded-full text-lg px-10 py-2"
+                            onClick={CreatePost}
+                        >
+                            {loading ? "Save" : "Create"}
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <div className="mt-4">
-                <hr className="my-4 h-px border-0 bg-slate-400 mx-20" />
+    
+            {/* Divider */}
+            <div className="mt-8">
+                <hr className="my-4 h-px border-0 bg-slate-400 mx-auto w-11/12" />
             </div>
         </div>
     );
-}
+}    
 
 // TextForm Component
 function TextForm({ onChange }: { onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void }) {
     return (
-        <form className="w-full max-w-4xl mx-auto px-6 md:px-10 lg:px-20">
+        <form className="w-full max-w-7xl mx-auto px-6 md:px-10 lg:px-20"> 
             <label
                 htmlFor="content"
                 className="block mb-2 text-2xl font-medium text-gray-500"
@@ -120,3 +122,4 @@ function TextForm({ onChange }: { onChange: (e: ChangeEvent<HTMLTextAreaElement>
         </form>
     );
 }
+

@@ -40,7 +40,7 @@ export const ProfilePage = () => {
     }, []);
 
     if (!profile) {
-        return Loading
+        return Loading()
     }
 
     return (

@@ -34,10 +34,10 @@ router.get("/feed", auth, async (req, res) => {
             },
         });
 
-    
         res.status(200).json({
             allBlogs
         });
+        
     } catch (error) {
         return res.status(500).json({
             msg: "Error! Internal server error.",
@@ -122,14 +122,16 @@ router.get("/:id", auth, async(req, res) => {
 router.put("/update", auth, async(req, res) => {
 
     const body = req.body;
-    const isValid = updateBlogInput.safeParse(body);
-    if(!isValid.success) {
-        return res.status(400).json({
-            message : "Error!! Invalid inputs",
-        });
-    }
+    
     try {
-        const existingPost = await prisma.post.findUnique({
+        const isValid = updateBlogInput.safeParse(body);
+        if(!isValid.success) {
+            return res.status(400).json({
+                message : "Error!! Invalid inputs",
+            });
+        }
+
+        const existingPost = await prisma.post.findUnique({ 
             where: {
                 id: body.id,
                 authorId: req.userId,

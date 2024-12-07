@@ -33,6 +33,7 @@ router.post('/signup', async(req, res) => {
                 details: valid.error.format(), 
             });
         };
+        
         const ifExist = await prisma.user.findUnique({
             where : {
                 email : body.email,
